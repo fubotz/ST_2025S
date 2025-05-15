@@ -15,20 +15,20 @@
 set -euo pipefail
 
 # static vars
-cmd='/remote/idiap.svm/temp.speech01/jzuluaga/kaldi-jul-2020/egs/wsj/s5/utils/parallel/queue.pl -l gpu -P minerva -l h='vgn[ij]*' -V'
+cmd='none'
 
 # training vars
 ecapa_tdnn_hub="speechbrain/spkrec-ecapa-voxceleb/embedding_model.ckpt"
 seed="1986"
-apply_augmentation="True"
-max_batch_len=600
+apply_augmentation="False"
+max_batch_len=300
 
 # data folder:
-csv_prepared_folder="data/en"
+csv_prepared_folder="data_small"
 output_dir="results/ECAPA-TDNN/EN/spkrec-ecapa-voxceleb"
 
 # If augmentation is defined:
-if [ ! "$apply_augmentation" == 'True' ]; then
+if [ "$apply_augmentation" == 'True' ]; then
     output_folder="${output_dir}-augmented/$seed"
     rir_folder="data/rir_folder/"
 else
@@ -55,7 +55,7 @@ $cmd python3 accent_id/train.py accent_id/hparams/train_ecapa_tdnn.yaml \
     --apply_augmentation="$apply_augmentation" \
     --max_batch_len="$max_batch_len" \
     --output_folder="$output_folder" \
-    --ecapa_tdnn_hub="$ecapa_tdnn_hub" 
-
+    --ecapa_tdnn_hub="$ecapa_tdnn_hub"
+    
 echo "Done training of $ecapa_tdnn_hub in $output_folder"
 exit 0
