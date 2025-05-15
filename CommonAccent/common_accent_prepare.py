@@ -170,7 +170,7 @@ def prepare_common_accent(
 
     # Audio files extensions
     extension = [".mp3"]
-
+    print(data_folder, extension, language)
     # Create the signal list of train, dev, and test sets.
     data_split = create_sets(data_folder, extension, language=language)
 
@@ -220,6 +220,7 @@ def create_sets(data_folder, extension, language="en"):
     -------
     dictionary containing train, dev, and test splits.
     """
+    data_folder = os.path.join("/content/accent-recog-slt2022/CommonAccent", data_folder)
     # get the ACCENT dictionary from accent_configuration
     if language == "en":
         ACCENTS = _ACCENTS_EN
@@ -251,10 +252,12 @@ def create_sets(data_folder, extension, language="en"):
     # Fill the train, dev and test datasets with audio filenames
     for dataset in datasets:
         curr_csv_file = os.path.join(data_folder, language, dataset + ".tsv")
+        print(curr_csv_file)
         with open(curr_csv_file, "r") as file:
             csvreader = csv.reader(file, delimiter='\t')
             for row in csvreader:
                 accent = row[4]  # accent information is in this field
+                # print(accent)
 
                 # if accent is part of the accents (top file dict), then, we add it:
                 if accent in ACCENTS:
@@ -264,7 +267,7 @@ def create_sets(data_folder, extension, language="en"):
                         continue
                     utt_id = row[1]
                     wav_path = row[2]
-
+                    # print(utt_id, wav_path)
                     # get transcript and clean it! 
                     transcript = clean_transcript(row[7], language=language)
                     # short transcript, remove:
@@ -277,25 +280,34 @@ def create_sets(data_folder, extension, language="en"):
                     if os.path.isfile(wav_path):
                         info = torchaudio.info(wav_path)
                         audio_duration = info.num_frames / info.sample_rate
+                        # print(info, audio_duration)
                     else:
+                        # print("error")
                         msg = "\tError loading: %s" % (str(len(wav_path)))
                         logger.info(msg)
-                        continue
+                        audio_duration = 0
+                        # continue
                     # append to list
+                    # print(utt_id, wav_path, transcript, audio_duration, clean_accent)
+                    
                     accent_wav_list.append([utt_id, wav_path, transcript, audio_duration, clean_accent])
 
                     # update the accent counter
                     accent_counter[accent] += 1
 
     # Split the data in train/dev/test balanced:
+    # print("accent_wav_list: ")
+    # print(accent_wav_list)
     df = pd.DataFrame(
-        accent_wav_list, columns=["utt_id", "path", "transcript", "duration", "accent"]
+        accent_wav_list, columns=["utt_id", "mp3_path", "transcript", "duration", "accent"]
     )
+
 
     df_train, df_dev, df_test = [], [], []
 
     # We need to create the train/dev/test sets, with equal samples for dev and test sets
     all_accents = df.accent.unique()
+    # print(all_accents)
 
     # for loop to go over each accent and get the values
     for accent in all_accents:
