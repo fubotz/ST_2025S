@@ -18,7 +18,7 @@ from datasets import load_dataset, load_from_disk
 import warnings
 warnings.filterwarnings("ignore")
 
-_COMMON_VOICE_FOLDER = "common_voice_11_0/common_voice_11_0.py"
+# _COMMON_VOICE_FOLDER = "common_voice_11_0/common_voice_11_0.py"
 
 def prepare_cv_from_hf(output_folder, language="en"):
     """ function to prepare the datasets in <output-folder> """
@@ -28,7 +28,9 @@ def prepare_cv_from_hf(output_folder, language="en"):
     os.makedirs(output_folder, exist_ok=True)
 
     # Prepare the the common voice dataset in streaming mode
-    common_voice_ds = load_dataset(_COMMON_VOICE_FOLDER, language, streaming=True)
+    # common_voice_ds = load_dataset(_COMMON_VOICE_FOLDER, language, streaming=True)
+    common_voice_ds = load_dataset("fsicoli/common_voice_19_0", language, streaming=True, trust_remote_code=True)
+
 
     # just select relevant splits: train/validation/test set
     splits = ["train", "validation", "test"]
