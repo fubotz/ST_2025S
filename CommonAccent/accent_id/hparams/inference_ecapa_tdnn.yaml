@@ -11,10 +11,11 @@ __set_seed: !apply:torch.manual_seed [!ref <seed>]
 
 # Set up folders for reading from and writing:
 data_folder: /remote/idiap.svm/resource.dataset04/CommonVoice
-csv_prepared_folder: data/
+csv_prepared_folder: data_small/
 output_folder: results/analysis
-pretrained_path: /remote/idiap.svm/temp.speech01/jzuluaga/experiments/slt/accent-recog-slt2022/CommonAccent/accent_id/results/ECAPA-TDNN-nopretrain/1986/save/
-load_folder: !ref <pretrained_path>/CKPT+2023-01-06+10-01-26+00
+# pretrained_path: /remote/idiap.svm/temp.speech01/jzuluaga/experiments/slt/accent-recog-slt2022/CommonAccent/accent_id/results/ECAPA-TDNN-nopretrain/1986/save/
+pretrained_path: /content/accent-recog-slt2022/CommonAccent/results/ECAPA-TDNN/EN/spkrec-ecapa-voxceleb/1986/save/
+load_folder: !ref <pretrained_path>/CKPT+2025-05-15+09-43-30+00
 device: 'cuda:0'
 skip_prep: True
 # max audio lenth allowed, higher than this is dropped
@@ -25,8 +26,8 @@ n_mels: 80
 
 # Training Parameters
 sample_rate: 16000
-batch_size: 64
-n_languages: 16
+batch_size: 32
+n_languages: 3
 emb_dim: 192 # dimensionality of the embeddings
 
 test_dataloader_options:
