@@ -170,7 +170,7 @@ def dataio_prep(hparams):
     # Define datasets. We also connect the dataset with the data processing
     # functions defined above.
     datasets = {}
-    for dataset in ["dummy", "dev", "test"]:
+    for dataset in ["train", "dev", "test"]:
         datasets[dataset] = sb.dataio.dataset.DynamicItemDataset.from_csv(
             csv_path=os.path.join(hparams["csv_prepared_folder"], dataset + ".csv"),
             replacements={"data_root": hparams["data_folder"]},
@@ -179,7 +179,7 @@ def dataio_prep(hparams):
         )
         # filtering out recordings with more than max_audio_length allowed
         datasets[dataset] = datasets[dataset].filtered_sorted(
-            key_max_value={"duration": hparaxms["max_audio_length"]},
+            key_max_value={"duration": hparams["max_audio_length"]},
         )
 
     return datasets
@@ -273,4 +273,4 @@ if __name__ == "__main__":
     )
     print_confusion_matrix(accid_brain, set_name="dev")
 
-    ipdb.set_trace()
+    # ipdb.set_trace()
