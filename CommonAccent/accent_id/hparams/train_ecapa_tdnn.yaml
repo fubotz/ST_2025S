@@ -41,9 +41,9 @@ n_mels: 80
 
 # Training Parameters
 sample_rate: 16000
-number_of_epochs: 30
+number_of_epochs: 5
 batch_size: 32
-n_accents: 21
+n_accents: 3
 emb_dim: 192 # dimensionality of the embeddings
 
 # batch type of sorting
@@ -51,7 +51,7 @@ sorting: random # sort the samples
 
 # This setup works well for V100 32GB GPU, adapts it to your needs.
 # Or turn it off (but training speed will decrease)
-dynamic_batching: True
+dynamic_batching: False
 max_batch_len: 600 #
 num_bucket: 200
 num_workers: 4
